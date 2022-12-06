@@ -1,0 +1,42 @@
+{% extends 'todo/base.html' %}
+
+{% block content %}
+
+<div class="container text-center">
+    <h1> Current Tasks </h1>
+    <br>
+    <div class="row">
+    
+    {% for categories in categories %}
+        <h3>{{ categories }}</h3>
+    {% for todos in todos %} 
+        {% if todos.category == 'd' and categories == 'Daily' or todos.category == 'w' and categories == 'Weekly' or todos.category == 'm' and categories == 'Monthly' or todos.category == 'q' and categories == 'Quarterly' or todos.category == 'y' and categories == 'Yearly' %}
+        
+        <div class="card bg-warning col-2">
+            <div class="card-body">
+            <h5 class="card-title">{{ todos.title }}</h5>
+            {% if todos.description %}
+            <p class="card-text">{{ todos.description }}</p>
+            {% endif %}
+            <a href="{% url 'viewtodo' todos.id %}" class="btn btn-primary">View Task</a>
+            <form method="POST" action="{% url 'completetodo' todos.id %}">
+                {% csrf_token %}
+            <button type="submit" class="btn btn-primary">Complete</button>
+            </form>
+            <form method="POST" action="{% url 'deletetodo' todos.id %}">
+                {% csrf_token %}
+            <button type="submit" class="btn btn-primary">Delete</button>
+            </form>
+            </div>
+        </div>
+        <br></br>
+        {% endif %}
+        {% endfor %}
+    {% endfor %}
+</div>
+<br><br><br>
+    <button type="button" class="btn">
+        <a href="/add-todo/">Add task</a>
+    </button>
+</div>
+{% endblock %}
